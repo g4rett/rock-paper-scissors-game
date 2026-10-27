@@ -83,6 +83,9 @@ function playGame() {
 
     const winLoseDisplay = document.createElement("div");
     document.body.append(winLoseDisplay);
+    winLoseDisplay.style.fontSize = "50px";
+    winLoseDisplay.textContent = "";
+    
 
 
     choiceButtons.forEach((button) => {
@@ -91,19 +94,22 @@ function playGame() {
             const compChoice = getComputerChoice();
             playRound(myChoice.toLowerCase(), compChoice);
             scoreBox.textContent = "Human Score: " + humanScore + " | Computer Score " + computerScore + " | Draws: " + drawScore;
-            if (humanScore === 5) {
-                alert("YOU WIN")
-                humanScore = 0;
-                computerScore = 0;
-            }
-            if (computerScore === 5) {
-                alert("YOU LOST");
-                humanScore = 0;
-                computerScore = 0;
-            }
-            scoreBox.textContent = "Human Score: " + humanScore + " | Computer Score " + computerScore + " | Draws: " + drawScore;
-
             choiceDisplayContainer.textContent = "You: " + myChoice + " | Computer: " + compChoice;
+            
+            if (humanScore === 5) {
+                winLoseDisplay.textContent = "You Win";
+                humanScore = 0;
+                computerScore = 0;
+                drawScore = 0;
+            } else if (computerScore === 5) {
+                winLoseDisplay.textContent = "You Lose";
+                humanScore = 0;
+                computerScore = 0;
+                drawScore = 0;
+            } else {
+                winLoseDisplay.textContent = "";
+            }
+            
         });
     });
 
