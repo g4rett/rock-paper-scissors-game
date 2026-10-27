@@ -1,89 +1,112 @@
 let humanScore = 0;
 let computerScore = 0;
+let drawScore = 0;
+let totalGames = 0;
+
+function winPercentage() {
+    const winRate = (humanScore + (.5 * drawScore)) / totalGames * 100
+}
 
 function getComputerChoice() {
     let choice = Math.floor(Math.random() * 3);
     if (choice === 0) {
         //console.log("scissors");
-        return "scissors";
+        return "Scissors";
     } else if (choice === 1) {
         //console.log("rock");
-        return "rock";
+        return "Rock";
     } else {
-        return "paper";
+        return "Paper";
     }
 }
-function getHumanChoice() {
-    let mychoice = prompt("Rock, Paper, or Scissors").toLowerCase();
-    return mychoice;
-}
+
+
 function playRound(humanChoice, computerChoice) {
-    if ((humanChoice === "scissors" && computerChoice === "paper") ||
-        (humanChoice === "paper" && computerChoice === "rock") ||
-        (humanChoice === "rock" && computerChoice === "scissors")) {
-            console.log("You: " + humanChoice + " | Computer: " + computerChoice);
-            console.log("You Win");
+    if ((humanChoice === "scissors" && computerChoice === "Paper") ||
+        (humanChoice === "paper" && computerChoice === "Rock") ||
+        (humanChoice === "rock" && computerChoice === "Scissors")) {
             humanScore++;
             return humanScore;
-        } else if ((humanChoice === "paper" && computerChoice === "scissors") ||
-            (humanChoice === "rock" && computerChoice === "paper") ||
-            (humanChoice === "scissors" && computerChoice === "rock")) {
-                console.log("You: " + humanChoice + " | Computer: " + computerChoice);
-                console.log("You Lose");
+        } else if ((humanChoice === "paper" && computerChoice === "Scissors") ||
+            (humanChoice === "rock" && computerChoice === "Paper") ||
+            (humanChoice === "scissors" && computerChoice === "Rock")) {
                 computerScore++;
                 return computerScore;
             } else {
-                console.log("You: " + humanChoice + " | Computer: " + computerChoice);
-                console.log("Draw");
+                drawScore++;
             }
 }
 function playGame() {
-    playRound(getHumanChoice(), getComputerChoice());
-    console.log("Your Score: " + humanScore + " Computer Score: " + computerScore);
-    if (humanScore === 3) {
-        console.log("BEST OF 5: WINNER");
-    } else if (computerScore === 3) {
-        console.log("BEST OF 5: LOSER");
-    }
-    playRound(getHumanChoice(), getComputerChoice());
-    console.log("Your Score: " + humanScore + " Computer Score: " + computerScore);
-    if (humanScore === 3) {
-        console.log("BEST OF 5: WINNER");
-        return;
-    } else if (computerScore === 3) {
-        console.log("BEST OF 5: LOSER");
-        return;
-    }
-    playRound(getHumanChoice(), getComputerChoice());
-    console.log("Your Score: " + humanScore + " Computer Score: " + computerScore);
-    if (humanScore === 3) {
-        console.log("BEST OF 5: WINNER");
-        return;
-    } else if (computerScore === 3) {
-        console.log("BEST OF 5: LOSER");
-        return;
-    }
-    playRound(getHumanChoice(), getComputerChoice());
-    console.log("Your Score: " + humanScore + " Computer Score: " + computerScore);
-    if (humanScore === 3) {
-        console.log("BEST OF 5: WINNER");
-        return;
-    } else if (computerScore === 3) {
-        console.log("BEST OF 5: LOSER");
-        return;
-    }
+    document.body.style.minHeight = "100vh";
+    document.body.style.margin = "0";
+    document.body.style.display = "flex";
+    document.body.style.flexDirection = "column";
+    document.body.style.alignItems = "center";
+    document.body.style.justifyContent = "center";
+    document.body.style.background = "pink";
 
-    playRound(getHumanChoice(), getComputerChoice());
-    console.log("Your Score: " + humanScore + " Computer Score: " + computerScore);
-    if (humanScore === 3) {
-        console.log("BEST OF 5: WINNER");
-        return;
-    } else if (computerScore === 3) {
-        console.log("BEST OF 5: LOSER");
-        return;
-    } else if (computerScore != 3 && humanScore !=3) {
-        playGame();
-    }
+    const scoreBox = document.createElement("div");
+    scoreBox.style.display = "flex";
+    scoreBox.style.justifyContent = "center";
+    scoreBox.style.alignItems = "center";
+    scoreBox.textContent = "Human Score: " + humanScore + " | Computer Score " + computerScore + " | Draws: " + drawScore;
+    scoreBox.style.fontSize = "24px";
+    document.body.append(scoreBox);
+
+    const scissorsButton = document.createElement("button");
+    scissorsButton.textContent = "Scissors";
+    scissorsButton.style.padding = "20px";
+
+    const rockButton = document.createElement("button");
+    rockButton.textContent = "Rock";
+    rockButton.style.padding = "20px";
+
+    const paperButton = document.createElement("button");
+    paperButton.textContent = "Paper";
+    paperButton.style.padding = "20px";
+
+    document.body.append(scissorsButton, rockButton, paperButton);
+
+    const choiceButtons = document.querySelectorAll("button");
+    const buttonContainer = document.createElement("div");
+    buttonContainer.append(...choiceButtons);
+    buttonContainer.style.display = "flex";
+    buttonContainer.style.flexDirection = "row";
+    buttonContainer.style.gap = "5px";
+
+    document.body.append(buttonContainer);
+
+    const choiceDisplayContainer = document.createElement("div");
+    document.body.append(choiceDisplayContainer);
+    choiceDisplayContainer.style.fontSize = "24px";
+    choiceDisplayContainer.textContent = "You: Select | Computer: Waiting...";
+
+    const winLoseDisplay = document.createElement("div");
+    document.body.append(winLoseDisplay);
+
+
+    choiceButtons.forEach((button) => {
+        button.addEventListener("click", (event) => {
+            const myChoice = button.textContent;
+            const compChoice = getComputerChoice();
+            playRound(myChoice.toLowerCase(), compChoice);
+            scoreBox.textContent = "Human Score: " + humanScore + " | Computer Score " + computerScore + " | Draws: " + drawScore;
+            if (humanScore === 5) {
+                alert("YOU WIN")
+                humanScore = 0;
+                computerScore = 0;
+            }
+            if (computerScore === 5) {
+                alert("YOU LOST");
+                humanScore = 0;
+                computerScore = 0;
+            }
+            scoreBox.textContent = "Human Score: " + humanScore + " | Computer Score " + computerScore + " | Draws: " + drawScore;
+
+            choiceDisplayContainer.textContent = "You: " + myChoice + " | Computer: " + compChoice;
+        });
+    });
+
 }
 playGame();
 
